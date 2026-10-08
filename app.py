@@ -38,7 +38,7 @@ def login():
     return render_template('login.html')
 
 
-# INÍCIO (página COM menu)
+# INÍCIO (página COM menu).
 @app.route('/inicio')
 def inicio():
     dados = {
@@ -85,6 +85,7 @@ def pagina_musicas():
         return redirect(url_for('pagina_musicas'))
     return render_template('musicas.html', musicas=musicas, artistas=artistas)
 
+# Tudo funcionando até o ultimo teste
 
 if __name__ == '__main__':
     app.run(debug=True)  # debug=True: recarrega sozinho ao salvar e mostra erros
