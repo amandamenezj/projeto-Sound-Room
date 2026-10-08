@@ -1,3 +1,10 @@
+{# ============================================================================
+   USUARIOS.HTML — CADASTRO DE USUÁRIOS
+   O que faz: em cima, o formulário para cadastrar um usuário; embaixo, a tabela
+   com TODOS os usuários cadastrados (inclusive quem criou conta pela tela de
+   login, que também pede nome, CPF e telefone). Ao salvar, o app.py guarda na lista e a página recarrega já com a
+   nova linha na tabela.
+   ============================================================================ #}
 {% extends 'base.html' %}
 {% block conteudo %}
 <h2 class="mb-4">Cadastro de Usuários</h2>
@@ -19,6 +26,7 @@
       {% for u in usuarios %}
         <tr><td>{{ u.nome }}</td><td>{{ u.email }}</td><td>{{ u.cpf }}</td><td>{{ u.telefone }}</td></tr>
       {% else %}
+        {# O else do for roda quando a lista está vazia #}
         <tr><td colspan="4" class="suave">Nenhum usuário cadastrado ainda.</td></tr>
       {% endfor %}
     </tbody>
