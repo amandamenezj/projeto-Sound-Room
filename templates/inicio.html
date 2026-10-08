@@ -1,17 +1,25 @@
-{% extends 'base.html' %}
-{% block conteudo %}
+{% extends 'base.html' %} {% block conteudo %}
 <h1 class="display-5">Your music, your space.</h1>
 <p class="suave fs-5 mb-5">Organize. Descubra. Escute.</p>
 
 <div class="row g-4">
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_usuarios }}</div><div class="suave mt-3">Usuários</div>
-  </div></div>
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_artistas }}</div><div class="suave mt-3">Artistas</div>
-  </div></div>
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_musicas }}</div><div class="suave mt-3">Músicas</div>
-  </div></div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_usuarios }}</div>
+      <div class="suave mt-3">Usuários</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_artistas }}</div>
+      <div class="suave mt-3">Artistas</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_musicas }}</div>
+      <div class="suave mt-3">Músicas</div>
+    </div>
+  </div>
 </div>
 {% endblock %}
