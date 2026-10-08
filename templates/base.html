@@ -1,0 +1,146 @@
+<!doctype html>
+<!--  ============================================================================
+BASE.HTML — TEMPLATE BASE O que faz: guarda o que se repete em todas as páginas
+(CSS, fontes, menu do topo). As outras páginas fazem {% extends 'base.html' %} e
+só preenchem o bloco "conteudo". O login esconde o menu trocando o bloco "menu"
+por vazio.
+============================================================================  -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SoundRoom</title>
+    <!-- {# Fontes do Google: Plus Jakarta Sans (texto) e Playfair Display (títulos) -->
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Playfair+Display:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <!--  Bootstrap: deixa o layout (grade, formulário, tabela) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- CSS do site -->
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #f5f0e8;
+        color: #171717;
+      }
+      h1,
+      h2,
+      .logo,
+      .numero {
+        font-family: "Playfair Display", serif;
+        font-weight: 800;
+      }
+      .suave {
+        color: #6b665e;
+      }
+      .topo {
+        background: #fdfbf6;
+        border-bottom: 1px solid #e2dccf;
+      }
+      .logo {
+        font-size: 1.25rem;
+        color: #171717;
+        text-decoration: none;
+      }
+      .menu a {
+        color: #6b665e;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .menu a.ativo {
+        color: #171717;
+        font-weight: 600;
+      }
+      .btn-sair {
+        border: 1px solid #e2dccf;
+        border-radius: 999px;
+        padding: 0.35rem 1.1rem;
+        color: #171717;
+        text-decoration: none;
+      }
+      .cartao {
+        background: #fdfbf6;
+        border: 1px solid #e2dccf;
+        border-radius: 20px;
+        box-shadow: 0 14px 24px -14px rgba(0, 0, 0, 0.2);
+      }
+      .numero {
+        font-size: 2.5rem;
+        color: #9b7ede;
+      }
+      .btn-lilas {
+        background: #7b5bc7;
+        color: #fff;
+        font-weight: 600;
+        border: 0;
+      }
+      .btn-lilas:hover {
+        background: #6a4bb5;
+        color: #fff;
+      }
+      .btn-contorno {
+        background: transparent;
+        color: #7b5bc7;
+        font-weight: 600;
+        border: 1px solid #7b5bc7;
+      }
+      .btn-contorno:hover {
+        background: #7b5bc7;
+        color: #fff;
+      }
+      .tabela th {
+        background: #efe8dc;
+      }
+      .aviso {
+        background: #f1ebfb;
+        border: 1px solid #d9cdf2;
+        color: #5a3fa0;
+        border-radius: 12px;
+        padding: 0.6rem 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- {# block menu: o login SUBSTITUI este bloco por um bloco vazio (página sem menu) #} -->
+    {% block menu %}
+    <header class="topo">
+      <div class="container d-flex flex-wrap align-items-center gap-4 py-3">
+        <a class="logo" href="{{ url_for('inicio') }}">✦ SoundRoom</a>
+        <nav class="menu d-flex gap-3 flex-grow-1">
+          <!-- {# request.endpoint = nome da função da rota atual (destaca o item ativo) #} -->
+          <a
+            href="{{ url_for('inicio') }}"
+            class="{{ 'ativo' if request.endpoint == 'inicio' }}"
+            >Início</a
+          >
+          <a
+            href="{{ url_for('pagina_usuarios') }}"
+            class="{{ 'ativo' if request.endpoint == 'pagina_usuarios' }}"
+            >Usuários</a
+          >
+          <a
+            href="{{ url_for('pagina_artistas') }}"
+            class="{{ 'ativo' if request.endpoint == 'pagina_artistas' }}"
+            >Artistas</a
+          >
+          <a
+            href="{{ url_for('pagina_musicas') }}"
+            class="{{ 'ativo' if request.endpoint == 'pagina_musicas' }}"
+            >Músicas</a
+          >
+        </nav>
+        <!-- {# Sair volta para o login (o app.py encerra a sessão ao abrir o login) #} -->
+        <a class="btn-sair" href="{{ url_for('login') }}">Sair</a>
+      </div>
+    </header>
+    {% endblock %}
+
+    <!-- {# block conteudo: cada página coloca o seu conteúdo aqui #} -->
+    <main class="container py-5">{% block conteudo %}{% endblock %}</main>
+  </body>
+  </html>
