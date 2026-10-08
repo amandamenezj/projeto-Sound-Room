@@ -41,6 +41,54 @@ def exigir_login():
     if request.endpoint not in ('login', 'static') and 'email' not in session:
         return redirect(url_for('login'))
 
+
+# LOGIN (página SEM menu)
+# GET = só abrir a página | POST = enviar o formulário. Por isso usamos os dois métodos.
+# A mesma rota mostra dois formulários: "entrar" (e-mail + senha) e "cadastrar"
+# (nome, CPF, telefone, e-mail + senha). O botão enviado vem em name="acao".
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    mensagem = ''
+    modo = request.args.get('modo', 'entrar')    # ?modo=cadastrar abre o formulário de cadastro
+    if request.method == 'POST':
+        modo = request.form.get('acao')          # 'entrar' ou 'cadastrar'
+        senha = request.form.get('senha', '')    # senha não leva strip: espaço pode fazer parte dela
+
+        if modo == 'cadastrar':
+            dados = ler_form('nome', 'cpf', 'telefone', 'email')
+            dados['email'] = dados['email'].lower()
+            usuario = buscar_usuario(dados['email'])
+            if not all(dados.values()) or not senha:
+                mensagem = 'Preencha todos os campos.'
+            elif usuario and usuario['senha']:
+                mensagem = 'Este e-mail já está cadastrado. Clique em Entrar.'
+            else:
+                dados['senha'] = generate_password_hash(senha)
+                if usuario:
+                    usuario.update(dados)        # e-mail já existia sem senha: completa os dados
+                else:
+                    usuarios.append(dados)
+                session['email'] = dados['email']    # já deixa a pessoa logada
+                return redirect(url_for('inicio'))
+        else:  # modo == 'entrar'
+            email = request.form.get('email', '').strip().lower()
+            usuario = buscar_usuario(email)
+            if usuario is None:
+                mensagem = 'E-mail não cadastrado. Clique em "Criar conta" para se cadastrar.'
+            elif not usuario['senha']:
+                mensagem = 'Este e-mail ainda não tem senha. Crie sua conta para definir uma.'
+            elif check_password_hash(usuario['senha'], senha):
+                session['email'] = email
+                return redirect(url_for('inicio'))
+            else:
+                mensagem = 'Senha incorreta.'
+    else:
+        # Abrir a página de login (ou clicar em "Sair") encerra a sessão
+        session.clear()
+    return render_template('login.html', mensagem=mensagem, modo=modo)
+
+
+
 # ARTISTAS: mesma lógica
 @app.route('/artistas', methods=['GET', 'POST'])
 def pagina_artistas():
