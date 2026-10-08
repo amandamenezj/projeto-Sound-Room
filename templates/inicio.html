@@ -1,17 +1,32 @@
-{% extends 'base.html' %}
-{% block conteudo %}
+<!--  ============================================================================
+   INICIO.HTML — PÁGINA INICIAL
+   O que faz: mostra três cartões com o TOTAL de usuários, artistas e músicas.
+   Os números chegam do app.py (len() de cada lista), então aumentam sozinhos
+   conforme as pessoas cadastram nas outras páginas.
+   ============================================================================ -->
+{% extends 'base.html' %} {% block conteudo %}
 <h1 class="display-5">Your music, your space.</h1>
 <p class="suave fs-5 mb-5">Organize. Descubra. Escute.</p>
 
+<!--  row/col-md-4 (Bootstrap): três cartões lado a lado  -->
 <div class="row g-4">
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_usuarios }}</div><div class="suave mt-3">Usuários</div>
-  </div></div>
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_artistas }}</div><div class="suave mt-3">Artistas</div>
-  </div></div>
-  <div class="col-md-4"><div class="cartao p-4">
-    <div class="numero">{{ total_musicas }}</div><div class="suave mt-3">Músicas</div>
-  </div></div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_usuarios }}</div>
+      <div class="suave mt-3">Usuários</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_artistas }}</div>
+      <div class="suave mt-3">Artistas</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="cartao p-4">
+      <div class="numero">{{ total_musicas }}</div>
+      <div class="suave mt-3">Músicas</div>
+    </div>
+  </div>
 </div>
 {% endblock %}
