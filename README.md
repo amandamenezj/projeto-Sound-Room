@@ -11,7 +11,7 @@ O SoundRoom é um protótipo de Interface de Usuário focado em oferecer uma exp
 
 O sistema é dividido em 4 abas principais:
 
-- ** Login:** Tela inicial com alternância (toggle) estilizada entre "Entrar" e "Cadastrar".
-- ** Usuários:** Formulário completo de cadastro de usuários (Nome, E-mail, CPF, Telefone, Senha) e uma tabela para listagem dos registros.
-- ** Artistas:** Formulário dedicado para registrar novos artistas no catálogo (Nome, Gênero, País e Ano de Início).
-- ** Músicas:** Cadastro detalhado de faixas (Título, Artista, Álbum, Gênero, Duração e Ano) integrado com uma tabela de exibição da biblioteca.
+- **Login:** Tela inicial com alternância (toggle) estilizada entre "Entrar" e "Cadastrar".
+- **Usuários:** Formulário completo de cadastro de usuários (Nome, E-mail, CPF, Telefone, Senha) e uma tabela para listagem dos registros.
+- **Artistas:** Formulário dedicado para registrar novos artistas no catálogo (Nome, Gênero, País e Ano de Início).
+- **Músicas:** Cadastro detalhado de faixas (Título, Artista, Álbum, Gênero, Duração e Ano) integrado com uma tabela de exibição da biblioteca.
