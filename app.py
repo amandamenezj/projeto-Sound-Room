@@ -88,6 +88,37 @@ def login():
     return render_template('login.html', mensagem=mensagem, modo=modo)
 
 
+# INÍCIO (página COM menu)
+@app.route('/inicio')
+def inicio():
+    dados = {
+        'total_usuarios': len(usuarios),   # len() conta os itens de cada lista
+        'total_artistas': len(artistas),
+        'total_musicas': len(musicas),
+    }
+    # O ** desempacota o dicionário: cada chave vira uma variável no template
+    return render_template('inicio.html', **dados)
+
+
+# USUÁRIOS: a mesma rota lista (GET) e cadastra (POST)
+@app.route('/usuarios', methods=['GET', 'POST'])
+def pagina_usuarios():
+    if request.method == 'POST':
+        # Lê os <input name="..."> do formulário
+        dados = ler_form('nome', 'email', 'cpf', 'telefone')
+        dados['email'] = dados['email'].lower()
+        # all(...) é True só se NENHUM campo estiver vazio
+        if all(dados.values()):
+            existente = buscar_usuario(dados['email'])
+            if existente:
+                existente.update(dados)    # e-mail já existe: completa os dados (a senha continua)
+            else:
+                dados['senha'] = ''        # cadastrado aqui, ainda sem senha de login
+                usuarios.append(dados)
+        # Redireciona após salvar: se apertar F5, o cadastro não é repetido
+        return redirect(url_for('pagina_usuarios'))
+    return render_template('usuarios.html', usuarios=usuarios)
+
 
 # ARTISTAS: mesma lógica
 @app.route('/artistas', methods=['GET', 'POST'])
@@ -98,6 +129,17 @@ def pagina_artistas():
             artistas.append(dados)
         return redirect(url_for('pagina_artistas'))
     return render_template('artistas.html', artistas=artistas)
+
+
+# MÚSICAS: mesma lógica (envia também os artistas para montar o <select>)
+@app.route('/musicas', methods=['GET', 'POST'])
+def pagina_musicas():
+    if request.method == 'POST':
+        dados = ler_form('titulo', 'artista', 'album', 'genero', 'duracao', 'ano')
+        if all(dados.values()):
+            musicas.append(dados)
+        return redirect(url_for('pagina_musicas'))
+    return render_template('musicas.html', musicas=musicas, artistas=artistas)
 
 
 if __name__ == '__main__':
