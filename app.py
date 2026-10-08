@@ -41,6 +41,16 @@ def exigir_login():
     if request.endpoint not in ('login', 'static') and 'email' not in session:
         return redirect(url_for('login'))
 
+# ARTISTAS: mesma lógica
+@app.route('/artistas', methods=['GET', 'POST'])
+def pagina_artistas():
+    if request.method == 'POST':
+        dados = ler_form('nome', 'genero', 'pais', 'ano_inicio')
+        if all(dados.values()):
+            artistas.append(dados)
+        return redirect(url_for('pagina_artistas'))
+    return render_template('artistas.html', artistas=artistas)
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # debug=True: recarrega sozinho ao salvar e mostra erros
