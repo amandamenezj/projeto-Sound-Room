@@ -1,6 +1,20 @@
+<!--  ============================================================================
+   MUSICAS.HTML — CADASTRO DE MÚSICAS
+   O que faz: formulário para cadastrar uma música (escolhendo um artista já
+   cadastrado) e tabela com as músicas salvas. Cada música entra no total da
+   página Início. Se ainda não existe nenhum artista, mostra um aviso.
+   ============================================================================  -->
 {% extends 'base.html' %} {% block conteudo %}
 <h2 class="mb-4">Cadastro de Músicas</h2>
 
+<!--  Aviso só aparece enquanto a lista de artistas está vazia  -->
+{% if not artistas %}
+<div class="aviso mb-4">
+  Para cadastrar músicas, primeiro cadastre um
+  <a href="{{ url_for('pagina_artistas') }}">artista</a>.
+</div>
+{% endif %}
+<!--- Formulário: envia para a mesma rota (/musicas) -->
 <form method="post" class="cartao p-4 mb-5 row g-3">
   <div class="col-md-6">
     <label class="form-label">Título</label
@@ -8,7 +22,7 @@
   </div>
   <div class="col-md-6">
     <label class="form-label">Artista</label>
-    {# As opções vêm da lista de artistas enviada pelo app.py #}
+    <!--  As opções vêm da lista de artistas enviada pelo app.py  -->
     <select name="artista" class="form-select" required>
       <option value="">Escolha um artista</option>
       {% for a in artistas %}
@@ -35,6 +49,7 @@
   <div class="col-12"><button class="btn btn-lilas px-4">Salvar</button></div>
 </form>
 
+<!-- Tabela 1: uma linha para cada música da lista  -->
 <div class="cartao overflow-hidden">
   <table class="table tabela m-0">
     <thead>
@@ -56,6 +71,10 @@
         <td>{{ m.genero }}</td>
         <td>{{ m.duracao }}</td>
         <td>{{ m.ano }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" class="suave">Nenhuma música cadastrada ainda.</td>
       </tr>
       {% endfor %}
     </tbody>

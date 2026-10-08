@@ -1,7 +1,14 @@
+<!--  ============================================================================
+   USUARIOS.HTML — CADASTRO DE USUÁRIOS
+   O que faz: em cima, o formulário para cadastrar um usuário; embaixo, a tabela
+   com TODOS os usuários cadastrados (inclusive quem criou conta pela tela de
+   login, que também pede nome, CPF e telefone). Ao salvar, o app.py guarda na lista e a página recarrega já com a
+   nova linha na tabela.
+   ============================================================================  -->
 {% extends 'base.html' %} {% block conteudo %}
 <h2 class="mb-4">Cadastro de Usuários</h2>
 
-{# Formulário: method="post" envia para a mesma rota (/usuarios) #}
+<!--  Formulário: method="post" envia para a mesma rota (/usuarios)  -->
 <form method="post" class="cartao p-4 mb-5 row g-3">
   <div class="col-md-6">
     <label class="form-label">Nome</label
@@ -22,7 +29,7 @@
   <div class="col-12"><button class="btn btn-lilas px-4">Salvar</button></div>
 </form>
 
-{# Tabela: o for repete uma linha para cada usuário da lista #}
+<!--  Tabela 2: o for repete uma linha para cada usuário da lista  -->
 <div class="cartao overflow-hidden">
   <table class="table tabela m-0">
     <thead>
@@ -42,6 +49,7 @@
         <td>{{ u.telefone }}</td>
       </tr>
       {% else %}
+      <!--  O else do for roda quando a lista está vazia  -->
       <tr>
         <td colspan="4" class="suave">Nenhum usuário cadastrado ainda.</td>
       </tr>
