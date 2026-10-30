@@ -157,6 +157,8 @@ def pagina_musicas():
     # TODO (BANCO): SELECT * FROM musicas  +  SELECT * FROM artistas (para o <select>)  +  registro em edição
     return render_template('musicas.html', musicas=[], artistas=[], indice=None, edicao={})
 
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # debug=True: recarrega sozinho ao salvar e mostra erros
