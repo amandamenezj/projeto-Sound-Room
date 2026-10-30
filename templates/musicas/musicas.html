@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 class="mb-4">Cadastro de Músicas</h2>
+{% if not artistas %}
+  <div class="aviso mb-4">Para cadastrar músicas, primeiro cadastre um <a href="{{ url_for('pagina_artistas') }}">artista</a>.</div>
+{% endif %}
+<form method="post" class="cartao p-4 mb-5 row g-3">
+  {% if indice is not none %}<input type="hidden" name="indice" value="{{ indice }}">{% endif %}
+  <div class="col-md-6"><label class="form-label">Título</label><input name="titulo" value="{{ edicao.titulo }}" class="form-control" required></div>
+  <div class="col-md-6">
+    <label class="form-label">Artista</label>
+    <select name="artista" class="form-select" required>
+      <option value="">Escolha um artista</option>
+      {% for a in artistas %}<option {{ 'selected' if a.nome == edicao.artista }}>{{ a.nome }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-6"><label class="form-label">Álbum</label><input name="album" value="{{ edicao.album }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">Gênero</label><input name="genero" value="{{ edicao.genero }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">Duração</label><input name="duracao" placeholder="3:45" value="{{ edicao.duracao }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">Ano</label><input type="number" name="ano" value="{{ edicao.ano }}" class="form-control" required></div>
+  <div class="col-12 d-flex gap-2">
+    <button class="btn btn-lilas px-4">{{ 'Atualizar' if indice is not none else 'Salvar' }}</button>
+    {% if indice is not none %}<a class="btn btn-contorno" href="{{ url_for('pagina_musicas') }}">Cancelar</a>{% endif %}
+  </div>
+</form>
+
+<div class="cartao overflow-hidden">
+  <table class="table tabela m-0">
+    <thead><tr><th>Título</th><th>Artista</th><th>Álbum</th><th>Gênero</th><th>Duração</th><th>Ano</th><th>Ações</th></tr></thead>
+    <tbody>
+      {% for x in musicas %}
+        <tr><td>{{ x.titulo }}</td><td>{{ x.artista }}</td><td>{{ x.album }}</td><td>{{ x.genero }}</td><td>{{ x.duracao }}</td><td>{{ x.ano }}</td><td class="text-nowrap">
+          <a class="btn btn-sm btn-contorno" href="{{ url_for('pagina_musicas', editar=loop.index0) }}">Editar</a>
+          <form method="post" class="d-inline" onsubmit="return confirm('Excluir esta música?')">
+            <button name="excluir" value="{{ loop.index0 }}" class="btn btn-sm btn-excluir">Excluir</button>
+          </form>
+        </td></tr>
+      {% else %}
+        <tr><td colspan="7" class="suave">Nenhuma música cadastrada ainda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
