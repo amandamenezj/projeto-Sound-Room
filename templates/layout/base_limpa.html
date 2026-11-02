@@ -38,17 +38,6 @@
     </style>
   </head>
   <body>
-    {% block menu %}
-    <header class="topo">
-      <div class="container d-flex flex-wrap align-items-center gap-4 py-3">
-
-        {% block conteudo %}
-        
-        {% endblock %}
-        
-        </header>
-    {% endblock %}
-
     <main class="container py-5">{% block conteudo %}{% endblock %}</main>
   </body>
 </html>

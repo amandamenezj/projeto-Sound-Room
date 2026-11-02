@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 class="mb-4">Cadastro de Artistas</h2>
+
+<form method="post" class="cartao p-4 mb-5 row g-3">
+  {% if indice is not none %}<input type="hidden" name="indice" value="{{ indice }}">{% endif %}
+  <div class="col-md-6"><label class="form-label">Nome artístico</label><input name="nome" value="{{ edicao.nome }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">Gênero musical</label><input name="genero" value="{{ edicao.genero }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">País</label><input name="pais" value="{{ edicao.pais }}" class="form-control" required></div>
+  <div class="col-md-6"><label class="form-label">Ano de início</label><input type="number" name="ano_inicio" value="{{ edicao.ano_inicio }}" class="form-control" required></div>
+  <div class="col-12 d-flex gap-2">
+    <button class="btn btn-lilas px-4">{{ 'Atualizar' if indice is not none else 'Salvar' }}</button>
+    {% if indice is not none %}<a class="btn btn-contorno" href="{{ url_for('pagina_artistas') }}">Cancelar</a>{% endif %}
+  </div>
+</form>
+
+<div class="cartao overflow-hidden">
+  <table class="table tabela m-0">
+    <thead><tr><th>Nome artístico</th><th>Gênero</th><th>País</th><th>Início</th><th>Ações</th></tr></thead>
+    <tbody>
+      {% for x in artistas %}
+        <tr><td>{{ x.nome }}</td><td>{{ x.genero }}</td><td>{{ x.pais }}</td><td>{{ x.ano_inicio }}</td><td class="text-nowrap">
+          <a class="btn btn-sm btn-contorno" href="{{ url_for('pagina_artistas', editar=loop.index0) }}">Editar</a>
+          <form method="post" class="d-inline" onsubmit="return confirm('Excluir este artista? As músicas dele também serão excluídas.')">
+            <button name="excluir" value="{{ loop.index0 }}" class="btn btn-sm btn-excluir">Excluir</button>
+          </form>
+        </td></tr>
+      {% else %}
+        <tr><td colspan="5" class="suave">Nenhum artista cadastrado ainda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
