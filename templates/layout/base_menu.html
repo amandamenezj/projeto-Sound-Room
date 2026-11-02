@@ -41,11 +41,16 @@
     {% block menu %}
     <header class="topo">
       <div class="container d-flex flex-wrap align-items-center gap-4 py-3">
-
-        {% block conteudo %}
-        
-        {% endblock %}
-
+        <a class="logo" href="{{ url_for('dashboard') }}">✦ SoundRoom</a>
+        <nav class="menu d-flex flex-wrap gap-3 flex-grow-1">
+          {# request.endpoint = nome da função da rota atual (destaca o item ativo) #}
+          <a href="{{ url_for('dashboard') }}" class="{{ 'ativo' if request.endpoint == 'dashboard' }}">Início</a>
+          <a href="{{ url_for('listar_usuarios') }}" class="{{ 'ativo' if request.endpoint == 'listar_usuarios' }}">Usuários</a>
+          <a href="{{ url_for('listar_artistas') }}" class="{{ 'ativo' if request.endpoint == 'listar_artistas' }}">Artistas</a>
+          <a href="{{ url_for('listar_musicas') }}" class="{{ 'ativo' if request.endpoint == 'listar_musicas' }}">Músicas</a>
+        </nav>
+        <a class="btn-sair" href="{{ url_for('inicio') }}">Sair</a>
+      </div>
     </header>
     {% endblock %}
 
