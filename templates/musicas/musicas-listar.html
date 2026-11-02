@@ -1,0 +1,42 @@
+{% extends 'layout/base_menu.html' %}
+
+{% block titulo %} Listar Músicas {% endblock %}
+
+{% block conteudo %}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Músicas</h2>
+    <p class="suave mb-0">Todas as músicas cadastradas no sistema.</p>
+  </div>
+  <a class="btn btn-lilas px-4" href="{{ url_for('inserir_musica') }}">
+    <i class="bi bi-plus-square me-1"></i> Nova música
+  </a>
+</div>
+
+<div class="cartao overflow-hidden">
+  <div class="table-responsive">
+    <table class="table tabela align-middle m-0" style="--bs-table-bg: transparent">
+      <thead><tr><th>Título</th><th>Artista</th><th>Álbum</th><th>Gênero</th><th>Duração</th><th>Ano</th><th>Ações</th></tr></thead>
+      <tbody>
+        {% for x in musicas %}
+          <tr>
+            <td>{{ x.titulo }}</td>
+            <td>{{ x.artista }}</td>
+            <td>{{ x.album }}</td>
+            <td>{{ x.genero }}</td>
+            <td>{{ x.duracao }}</td>
+            <td>{{ x.ano }}</td>
+            <td class="text-nowrap">
+              <a class="btn btn-sm btn-contorno" href="{{ url_for('inserir_musica') }}">Editar</a>
+              <button type="button" class="btn btn-sm btn-excluir">Excluir</button>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="7" class="suave">Nenhuma música cadastrada ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

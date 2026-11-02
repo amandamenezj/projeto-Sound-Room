@@ -1,0 +1,33 @@
+{% extends 'layout/base_menu.html' %}
+
+{% block titulo %} Cadastro de Usuários {% endblock %}
+
+{% block conteudo %}
+<h2 class="mb-1">Cadastro de Usuários</h2>
+<p class="suave mb-4">Preencha os dados para adicionar um novo usuário.</p>
+
+<div class="cartao p-4">
+  <form method="post" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label" for="nome">Nome</label>
+      <input id="nome" name="nome" class="form-control" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="email">E-mail</label>
+      <input id="email" type="email" name="email" class="form-control" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="cpf">CPF</label>
+      <input id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" class="form-control" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label" for="telefone">Telefone</label>
+      <input id="telefone" type="tel" name="telefone" placeholder="(00) 00000-0000" class="form-control" required>
+    </div>
+    <div class="col-12 d-flex gap-2 mt-4">
+      <button class="btn btn-lilas px-4">Salvar</button>
+      <a class="btn btn-contorno" href="{{ url_for('listar_usuarios') }}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

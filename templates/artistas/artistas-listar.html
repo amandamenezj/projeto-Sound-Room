@@ -1,0 +1,40 @@
+{% extends 'layout/base_menu.html' %}
+
+{% block titulo %} Listar Artistas {% endblock %}
+
+{% block conteudo %}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Artistas</h2>
+    <p class="suave mb-0">Todos os artistas cadastrados no sistema.</p>
+  </div>
+  <a class="btn btn-lilas px-4" href="{{ url_for('inserir_artista') }}">
+    <i class="bi bi-plus-circle me-1"></i> Novo artista
+  </a>
+</div>
+
+<div class="cartao overflow-hidden">
+  <div class="table-responsive">
+    <table class="table tabela align-middle m-0" style="--bs-table-bg: transparent">
+      <thead><tr><th>Nome artístico</th><th>Gênero</th><th>País</th><th>Início</th><th>Ações</th></tr></thead>
+      <tbody>
+        {% for x in artistas %}
+          <tr>
+            <td>{{ x.nome }}</td>
+            <td>{{ x.genero }}</td>
+            <td>{{ x.pais }}</td>
+            <td>{{ x.ano_inicio }}</td>
+            <td class="text-nowrap">
+              <a class="btn btn-sm btn-contorno" href="{{ url_for('inserir_artista') }}">Editar</a>
+              <button type="button" class="btn btn-sm btn-excluir">Excluir</button>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="suave">Nenhum artista cadastrado ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

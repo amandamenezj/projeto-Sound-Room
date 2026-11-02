@@ -1,12 +1,34 @@
-{% extends 'layout/base_limpa.html' %}
+{% extends 'layout/base_menu.html' %}
 
-{% block titulo %} Listar Usuários {% endblock %}
+{% block titulo %} Dashboard {% endblock %}
 
+{% block conteudo %}
+<h2 class="mb-1">Painel de Controle</h2>
+<p class="suave mb-4">Visão geral do sistema e atalhos rápidos de navegação</p>
 
-    <main class="container py-5">
-        {% block conteudo %}
-         Dashboard
-        {% endblock %}
-    </main>
-  </body>
-</html>
+<div class="row g-4">
+  <div class="col-12 col-md-4">
+    <div class="cartao p-4 h-100">
+      <div class="numero">{{ total_usuarios }}</div>
+      <div class="suave mt-3 mb-4">Usuários</div>
+      <a class="btn btn-sm btn-contorno w-100" href="{{ url_for('listar_usuarios') }}">Ver usuários</a>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cartao p-4 h-100">
+      <div class="numero">{{ total_artistas }}</div>
+      <div class="suave mt-3 mb-4">Artistas</div>
+      <a class="btn btn-sm btn-contorno w-100" href="{{ url_for('listar_artistas') }}">Ver artistas</a>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cartao p-4 h-100">
+      <div class="numero">{{ total_musicas }}</div>
+      <div class="suave mt-3 mb-4">Músicas</div>
+      <a class="btn btn-sm btn-contorno w-100" href="{{ url_for('listar_musicas') }}">Ver músicas</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
