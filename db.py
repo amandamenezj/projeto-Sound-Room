@@ -1,76 +1,77 @@
-# db.py — Módulo central de acesso ao banco de dados
-# Qualquer arquivo que precise do banco importa apenas este módulo
+import os
 
-import mysql.connector
+from dotenv import load_dotenv
 from mysql.connector import Error, pooling
 
-# Parâmetros de conexão — editados apenas aqui, usados em todo o sistema
-_DB_PARAMS = {
-    'host':               'localhost',
-    'user':               'root',
-    'password':           '',
-    'database':           'projeto-sound-room',
-    'charset':            'utf8mb4',
-    'sql_mode':           ('STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,'
-                           'ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'),
-    'time_zone':          '-03:00',   # Horário de Brasília
-    'use_pure':           True,       # Python puro — compatível com todos os ambientes
-    'connection_timeout': 10,         # desiste após 10s sem resposta
-    'autocommit':         False,      # exige commit() explícito
+# Lê o arquivo .env e coloca cada linha dele nas variáveis de ambiente do programa.
+load_dotenv()
+
+if os.getenv('DB_NAME') is None:
+    raise RuntimeError('Não encontrei o arquivo .env. Copie o .env.example para .env e preencha.')
+
+CONFIGURACAO = {
+    'host': os.getenv('DB_HOST'),
+    'port': int(os.getenv('DB_PORT', '3306')),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD', ''),
+    'database': os.getenv('DB_NAME'),
+    'charset': 'utf8mb4',
+    'sql_mode': (
+        'STRICT_TRANS_TABLES,NO_ZERO_DATE,'
+        'ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
+    ),
+    'time_zone': '-03:00',  # horário de Brasília, igual em qualquer computador
+    'use_pure': True,  # conector em Python puro, evita erros com XAMPP e MySQL juntos
 }
 
-# Pool criado uma única vez quando o módulo é carregado pela primeira vez.
-# conn.close() devolve a conexão ao pool — não fecha fisicamente.
-_pool = pooling.MySQLConnectionPool(
-    pool_name='webapp_pool',
-    pool_size=5,           # conexões abertas permanentemente
-    pool_reset_session=True,
-    **_DB_PARAMS
-)
-
-def get_connection():
-    """Retorna uma conexão do pool. Levanta Exception em caso de falha."""
-    try:
-        return _pool.get_connection()
-    except Error as e:
-        raise Exception(f'Não foi possível obter conexão do pool: {e}')
+pool = pooling.MySQLConnectionPool(pool_name='soundroom_pool', pool_size=5, **CONFIGURACAO)
 
 def execute_query(sql, params=None, fetch=False):
-    """
-    Executa uma query SQL de forma segura.
+    if params is None:
+        params = ()
 
-    Parâmetros:
-        sql    — string SQL com %s como placeholders
-        params — tupla ou lista com os valores dos placeholders
-        fetch  — True para SELECT (retorna lista de dicts); False para INSERT/UPDATE/DELETE
+    conexao = pool.get_connection()
+    cursor = conexao.cursor(dictionary=True)
 
-    Retorna:
-        fetch=True  — lista de dicionários (cada linha = {'coluna': valor})
-        fetch=False — número de linhas afetadas
-    """
-    conn = get_connection()
     try:
-        # dictionary=True: cada linha retorna como dicionário — usuario['nome'] em vez de usuario[0]
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(sql, params or ())
+        cursor.execute(sql, params)
 
         if fetch:
-            return cursor.fetchall()   # retorna todas as linhas
+            resultado = cursor.fetchall()
         else:
-            conn.commit()              # confirma a transação
-            return cursor.rowcount     # número de linhas afetadas
+            conexao.commit()
+            resultado = cursor.rowcount
 
-    except Error as e:
-        conn.rollback()  # desfaz alterações parciais em caso de erro
-        raise Exception(f'Erro ao executar query: {e}')
+        return resultado
+    except Error:
+        conexao.rollback()
+        raise
     finally:
         cursor.close()
-        conn.close()   # devolve ao pool, não fecha fisicamente
+        conexao.close()
 
 def execute_one(sql, params=None):
-    """
-    Executa um SELECT e retorna apenas a primeira linha (ou None).
-    Útil para buscar um registro por ID.
-    """
-    resultados = execute_query(sql, params, fetch=True)
-    return resultados[0] if resultados else None
+    linhas = execute_query(sql, params, fetch=True)
+
+    if len(linhas) > 0:
+        return linhas[0]
+
+    return None
+
+def execute_insert(sql, params=None):
+    if params is None:
+        params = ()
+
+    conexao = pool.get_connection()
+    cursor = conexao.cursor()
+
+    try:
+        cursor.execute(sql, params)
+        conexao.commit()
+        return cursor.lastrowid
+    except Error:
+        conexao.rollback()
+        raise
+    finally:
+        cursor.close()
+        conexao.close()

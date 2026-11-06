@@ -1,6 +1,22 @@
-from flask import Flask, render_template
+import os
+
+from dotenv import load_dotenv
+from flask import Flask, redirect, render_template, url_for, request
+from flask_wtf.csrf import CSRFProtect
+
+from db import execute_one
+
+load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
+
+# Liga a proteção CSRF: todo formulário POST do sistema vai precisar do token
+CSRFProtect(app)
+
+# ==============================================================================
+# PÁGINAS PRINCIPAIS
+# ==============================================================================
 
 @app.route('/')
 def inicio():
@@ -18,6 +34,20 @@ def dashboard():
     # O ** desempacota o dicionário: cada chave vira uma variável no template
     return render_template('dashboard.html', **dados)
 
+
+#  perfis = execute_one('SELECT COUNT(*) AS total FROM perfis')
+#     usuarios = execute_one('SELECT COUNT(*) AS total FROM usuarios')
+#     produtos = execute_one('SELECT COUNT(*) AS total FROM produtos')
+
+#     return render_template('dashboard.html', titulo='Sistema de Gestão',
+#                            total_perfis=perfis['total'],
+#                            total_usuarios=usuarios['total'],
+#                            total_produtos=produtos['total'])
+
+# ==============================================================================
+# USUARIOS
+# ==============================================================================
+
 @app.route('/usuarios/listar')
 def listar_usuarios():
     return render_template('usuarios/usuarios_listar.html')
@@ -26,6 +56,10 @@ def listar_usuarios():
 def inserir_usuario():
     return render_template('usuarios/usuarios_form.html')
 
+# ==============================================================================
+# ARTISTAS
+# ==============================================================================
+
 @app.route('/artistas/listar')
 def listar_artistas():
     return render_template('artistas/artistas-listar.html')
@@ -33,6 +67,10 @@ def listar_artistas():
 @app.route('/artistas/inserir')
 def inserir_artista():
     return render_template('artistas/artistas-form.html')
+
+# ==============================================================================
+# MUSICAS
+# ==============================================================================
 
 @app.route('/musicas/listar')
 def listar_musicas():
@@ -43,6 +81,42 @@ def inserir_musica():
     return render_template('musicas/musicas-form.html')
 
 
+# ==============================================================================
+# PERFIS
+# ==============================================================================
+
+@app.route('/perfis/listar', method=['GET', 'POST'])
+def listar_perfil():
+
+    if request.method == 'POST':
+        redirect(url_for(listar_perfil))
+
+    return render_template('perfis/perfil-listar.html')
+
+
+@app.route('/perfis/inserir')
+def inserir_perfil():
+    return render_template('perfis/perfil-form.html')
+
+
+
+
+
+
+
+
+# ==============================================================================
+# TELAS DE ERROS
+# ==============================================================================
+
+@app.errorhandler(404)
+def pagina_nao_encontrada(erro):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def erro_no_servidor(erro):
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
