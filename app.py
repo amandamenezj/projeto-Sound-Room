@@ -85,7 +85,7 @@ def inserir_musica():
 # PERFIS
 # ==============================================================================
 
-@app.route('/perfis/listar', method=['GET', 'POST'])
+@app.route('/perfis/listar', methods=['GET', 'POST'])
 def listar_perfil():
 
     if request.method == 'POST':
